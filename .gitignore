@@ -1,0 +1,56 @@
+# Archivos del sistema
+*.DS_Store
+Thumbs.db
+
+# Archivos generados por el entorno de desarrollo
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+
+# Archivos de configuración
+*.appsettings.json
+*.appsettings.Development.json
+
+# Paquetes y dependencias
+*.nuget
+*.nupkg
+packages/
+
+# Configuración de IDE
+.vscode/
+.idea/
+*.swp
+
+# Archivos de configuración específicos de Visual Studio
+*.psess
+*.vspx
+*.vs/
+
+# Archivos de publicación
+publish/
+out/
+
+# Archivos de configuración de Mac/Linux
+*.tar.gz
+*.log
+
+# Archivos de caché y dependencias de Node.js (si se usa)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Configuración de Docker
+docker-compose.override.yml
+
+# Archivos temporales y registros
+*.log
+*.tmp
+*.bak
