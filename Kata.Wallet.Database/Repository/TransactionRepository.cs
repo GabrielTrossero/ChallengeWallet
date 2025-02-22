@@ -12,6 +12,7 @@ namespace Kata.Wallet.Database.Repository
     {
         Task Create(Domain.Transaction transaction);
         Task<IDbContextTransaction> BeginTransaction();
+        bool IsInMemoryDatabase();
     }
     public class TransactionRepository : ITransactionRepository
     {
@@ -32,6 +33,11 @@ namespace Kata.Wallet.Database.Repository
         public async Task<IDbContextTransaction> BeginTransaction()
         {
             return await _context.Database.BeginTransactionAsync();
+        }
+
+        public bool IsInMemoryDatabase()
+        {
+            return _context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         }
     }
 }

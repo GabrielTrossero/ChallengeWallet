@@ -60,29 +60,46 @@ namespace Kata.Wallet.Services
             }
 
 
-            using (var transactionScope = await _transactionRepository.BeginTransaction())
-            {
-                try
-                {
-                    walletOrigin.Balance -= transaction.Amount;
-                    walletDestination.Balance += transaction.Amount;
+            var isInMemoryDb = _transactionRepository.IsInMemoryDatabase();
 
+            return await ExecuteTransaction(walletOrigin, walletDestination, transaction, isInMemoryDb);
+        }
+
+        private async Task<string> ExecuteTransaction(Domain.Wallet walletOrigin, Domain.Wallet walletDestination, Domain.Transaction transaction, bool isInMemoryDb)
+        {
+            try
+            {
+                // Update balance of wallets
+                walletOrigin.Balance -= transaction.Amount;
+                walletDestination.Balance += transaction.Amount;
+
+                // If it's not an InMemory Database, then make a transaction
+                if (!isInMemoryDb)
+                {
+                    using (var transactionScope = await _transactionRepository.BeginTransaction())
+                    {
+                        await _walletService.Update(walletOrigin);
+                        await _walletService.Update(walletDestination);
+
+                        await _transactionRepository.Create(transaction);
+
+                        await transactionScope.CommitAsync();
+                    }
+                }
+                else
+                {
                     await _walletService.Update(walletOrigin);
                     await _walletService.Update(walletDestination);
 
                     await _transactionRepository.Create(transaction);
+                }
 
-                    await transactionScope.CommitAsync();
-                }
-                catch
-                {
-                    await transactionScope.RollbackAsync();
-                    return "Ocurrió un error al procesar la transacción.";
-                }
+                return string.Empty;
             }
-
-            return string.Empty;
+            catch
+            {
+                return "Ocurrió un error al procesar la transacción.";
+            }
         }
-
     }
 }
