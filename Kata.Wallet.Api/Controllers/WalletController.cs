@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kata.Wallet.Domain;
 using Kata.Wallet.Dtos;
 using Kata.Wallet.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,18 +17,29 @@ public class WalletController : ControllerBase
         _walletService = walletService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<Domain.Wallet>>> GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpPost]
-    public async Task<ActionResult> Create([FromBody] WalletDto walletDto)
+    [HttpPost("Create")]
+    public async Task<ActionResult> Create([FromBody] WalletCreateDto walletDto)
     {
         var wallet = _walletService.ConvertToWallet(walletDto);
         await _walletService.Create(wallet);
 
-        throw new NotImplementedException();
+        return Ok();
+    }
+
+    [HttpGet("GetAll")]
+    public async Task<ActionResult<List<Domain.Wallet>>> GetAll()
+    {
+        var wallets = await _walletService.GetAll();
+
+        return Ok(wallets);
+    }
+
+    [HttpGet("Filter")]
+    public async Task<ActionResult<List<Domain.Wallet>>> Filter([FromQuery] WalletDto filter)
+    {
+        var wallet = _walletService.ConvertToWallet(filter);
+        var wallets = await _walletService.Filter(wallet);
+
+        return Ok(wallets);
     }
 }

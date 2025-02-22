@@ -1,10 +1,17 @@
 using Kata.Wallet.Database;
+using Kata.Wallet.Database.Repository;
+using Kata.Wallet.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>();
+
+// Add Dependency Injection
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {

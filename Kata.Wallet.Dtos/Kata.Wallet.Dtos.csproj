@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kata.Wallet.Database\Kata.Wallet.Database.csproj" />
     <ProjectReference Include="..\Kata.Wallet.Domain\Kata.Wallet.Domain.csproj" />
   </ItemGroup>
 

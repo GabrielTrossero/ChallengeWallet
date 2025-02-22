@@ -15,6 +15,8 @@ namespace Kata.Wallet.Services
         WalletDto GetWalletDto(Domain.Wallet wallet); 
         Domain.Wallet ConvertToWallet(WalletDto dto);
         Task Create(Domain.Wallet wallet);
+        Task<List<Domain.Wallet>> GetAll();
+        Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
     }
 
     public class WalletService : IWalletService
@@ -41,6 +43,17 @@ namespace Kata.Wallet.Services
         public async Task Create(Domain.Wallet wallet)
         {
             await _walletRepository.Create(wallet);
+        }
+
+        public async Task<List<Domain.Wallet>> GetAll()
+        {
+            var filter = new Domain.Wallet();
+            return await _walletRepository.Filter(filter);
+        }
+
+        public async Task<List<Domain.Wallet>> Filter(Domain.Wallet filter)
+        {
+            return await _walletRepository.Filter(filter);
         }
     }
 }

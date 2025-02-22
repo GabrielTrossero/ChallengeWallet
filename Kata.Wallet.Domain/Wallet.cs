@@ -1,4 +1,6 @@
-﻿namespace Kata.Wallet.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Kata.Wallet.Domain;
 
 public class Wallet
 {
