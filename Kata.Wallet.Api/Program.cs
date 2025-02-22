@@ -1,7 +1,10 @@
 using Kata.Wallet.Database;
 using Kata.Wallet.Database.Repository;
 using Kata.Wallet.Services;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using System.Text.Json.Serialization;
+using System.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddSingleton<ResourceManager>(new ResourceManager(
+    "Kata.Wallet.Api.Resources.Messages", typeof(Program).Assembly
+));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +42,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Configurar soporte para múltiples idiomas
+var supportedCultures = new[] { "es", "en" };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"), // Español por defecto
+    SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
+    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
+};
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseHttpsRedirection();
 

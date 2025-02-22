@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Resources;
 
 namespace Kata.Wallet.Services
 {
@@ -21,12 +22,14 @@ namespace Kata.Wallet.Services
         private readonly IMapper _mapper;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IWalletService _walletService;
+        private readonly ResourceManager _resourceManager;
 
-        public TransactionService(IMapper mapper, ITransactionRepository transactionRepository, IWalletService walletService)
+        public TransactionService(IMapper mapper, ITransactionRepository transactionRepository, IWalletService walletService, ResourceManager resourceManager)
         {
             _mapper = mapper;
             _transactionRepository = transactionRepository;
             _walletService = walletService;
+            _resourceManager = resourceManager;
         }
 
         public TransactionDto ConvertToTransactionDto(Domain.Transaction transaction)
@@ -46,17 +49,17 @@ namespace Kata.Wallet.Services
 
             if (walletOrigin == null || walletDestination == null)
             {
-                return "Una o ambas billeteras no existen.";
+                return _resourceManager.GetString("WalletNotFound");
             }
 
             if (walletOrigin.Currency != walletDestination.Currency)
             {
-                return "Ambas billeteras deben tener la misma moneda para realizar la transacción.";
+                return _resourceManager.GetString("DifferentCurrencies");
             }
 
             if (walletOrigin.Balance < transaction.Amount)
             {
-                return "Saldo insuficiente en la billetera de origen.";
+                return _resourceManager.GetString("InsufficientFunds");
             }
 
 
@@ -98,7 +101,7 @@ namespace Kata.Wallet.Services
             }
             catch
             {
-                return "Ocurrió un error al procesar la transacción.";
+                return _resourceManager.GetString("TransactionError");
             }
         }
     }
