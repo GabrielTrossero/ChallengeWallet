@@ -11,6 +11,8 @@ builder.Services.AddDbContext<DataContext>();
 // Add Dependency Injection
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 
 builder.Services.AddControllers().AddJsonOptions(x =>
