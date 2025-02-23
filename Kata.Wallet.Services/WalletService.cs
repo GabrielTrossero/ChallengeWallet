@@ -13,8 +13,6 @@ namespace Kata.Wallet.Services
 {
     public interface IWalletService
     {
-        WalletDto ConvertToWalletDto(Domain.Wallet wallet);
-        Domain.Wallet ConvertToWallet(WalletDto dto);
         Task Create(Domain.Wallet wallet);
         Task<List<Domain.Wallet>> GetAll();
         Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
@@ -24,23 +22,11 @@ namespace Kata.Wallet.Services
 
     public class WalletService : IWalletService
     {
-        private readonly IMapper _mapper;
         private readonly IWalletRepository _walletRepository;
 
-        public WalletService(IMapper mapper, IWalletRepository walletRepository) 
+        public WalletService(IWalletRepository walletRepository) 
         {
-            _mapper = mapper;
             _walletRepository = walletRepository;
-        }
-
-        public WalletDto ConvertToWalletDto(Domain.Wallet wallet)
-        {
-            return _mapper.Map<WalletDto>(wallet);
-        }
-
-        public Domain.Wallet ConvertToWallet(WalletDto dto)
-        {
-            return _mapper.Map<Domain.Wallet>(dto);
         }
 
         public async Task Create(Domain.Wallet wallet)

@@ -11,17 +11,19 @@ namespace Kata.Wallet.Api.Controllers
     {
         private readonly ITransactionService _transactionService;
         private readonly IWalletService _walletService;
+        private readonly ITransactionMappingService _transactionMappingService;
 
-        public TransactionController(ITransactionService transactionService, IWalletService walletService) 
+        public TransactionController(ITransactionService transactionService, IWalletService walletService, ITransactionMappingService transactionMappingService) 
         { 
             _transactionService = transactionService;
             _walletService = walletService;
+            _transactionMappingService = transactionMappingService;
         }
 
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] TransactionDto transactionDto, int idWalletOrigin, int idWalletDestination)
         {
-            var transaction = _transactionService.ConvertToTransaction(transactionDto);
+            var transaction = _transactionMappingService.ConvertToTransaction(transactionDto);
 
             var errorMessage = await _transactionService.Create(transaction, idWalletOrigin, idWalletDestination);
 
@@ -38,7 +40,7 @@ namespace Kata.Wallet.Api.Controllers
         {
             var transactions = await _transactionService.GetTransactions(idWallet);
 
-            var transactionsDto = _transactionService.ConvertToTransactionDto(transactions);
+            var transactionsDto = _transactionMappingService.ConvertToTransactionDto(transactions);
 
             return Ok(transactionsDto);
         }

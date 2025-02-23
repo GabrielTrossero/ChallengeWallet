@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Resources;
+using Kata.Wallet.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>();
 
 // Add Dependency Injection
+builder.Services.AddScoped<IWalletMappingService, WalletMappingService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITransactionMappingService, TransactionMappingService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 

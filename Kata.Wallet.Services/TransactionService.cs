@@ -13,47 +13,21 @@ namespace Kata.Wallet.Services
 {
     public interface ITransactionService 
     {
-        TransactionDto ConvertToTransactionDto(Domain.Transaction transaction);
-        Domain.Transaction ConvertToTransaction(TransactionDto dto);
         Task<string> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino);
         Task<List<Domain.Transaction>> GetTransactions(int idWallet);
-        List<TransactionDto> ConvertToTransactionDto(List<Domain.Transaction> transactions);
-        List<Domain.Transaction> ConvertToTransaction(List<TransactionDto> transactions);
     }
 
     public class TransactionService : ITransactionService
     {
-        private readonly IMapper _mapper;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IWalletService _walletService;
         private readonly ResourceManager _resourceManager;
 
-        public TransactionService(IMapper mapper, ITransactionRepository transactionRepository, IWalletService walletService, ResourceManager resourceManager)
+        public TransactionService(ITransactionRepository transactionRepository, IWalletService walletService, ResourceManager resourceManager)
         {
-            _mapper = mapper;
             _transactionRepository = transactionRepository;
             _walletService = walletService;
             _resourceManager = resourceManager;
-        }
-
-        public TransactionDto ConvertToTransactionDto(Domain.Transaction transaction)
-        {
-            return _mapper.Map<TransactionDto>(transaction);
-        }
-
-        public List<TransactionDto> ConvertToTransactionDto(List<Domain.Transaction> transactions)
-        {
-            return transactions.Select(transaction => _mapper.Map<TransactionDto>(transaction)).ToList();
-        }
-
-        public Domain.Transaction ConvertToTransaction(TransactionDto dto)
-        {
-            return _mapper.Map<Domain.Transaction>(dto);
-        }
-
-        public List<Domain.Transaction> ConvertToTransaction(List<TransactionDto> transactions)
-        {
-            return transactions.Select(transaction => _mapper.Map<Domain.Transaction>(transaction)).ToList();
         }
 
         public async Task<string> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino)

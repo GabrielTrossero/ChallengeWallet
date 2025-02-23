@@ -11,16 +11,18 @@ namespace Kata.Wallet.API.Controllers;
 public class WalletController : ControllerBase
 {
     private readonly IWalletService _walletService;
+    private readonly IWalletMappingService _walletMappingService;
 
-    public WalletController(IWalletService walletService)
+    public WalletController(IWalletService walletService, IWalletMappingService walletMappingService)
     {
         _walletService = walletService;
+        _walletMappingService = walletMappingService;
     }
 
     [HttpPost("Create")]
     public async Task<ActionResult> Create([FromBody] WalletCreateDto walletDto)
     {
-        var wallet = _walletService.ConvertToWallet(walletDto);
+        var wallet = _walletMappingService.ConvertToWallet(walletDto);
         await _walletService.Create(wallet);
 
         return Ok();
@@ -37,8 +39,9 @@ public class WalletController : ControllerBase
     [HttpGet("Filter")]
     public async Task<ActionResult<List<Domain.Wallet>>> Filter([FromQuery] WalletDto filter)
     {
-        var wallet = _walletService.ConvertToWallet(filter);
+        var wallet = _walletMappingService.ConvertToWallet(filter);
         var wallets = await _walletService.Filter(wallet);
+        var walletsDto = _walletMappingService.ConvertToWalletDto(wallets);
 
         return Ok(wallets);
     }
