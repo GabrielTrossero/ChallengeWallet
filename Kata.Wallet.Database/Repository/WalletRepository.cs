@@ -10,7 +10,7 @@ namespace Kata.Wallet.Database.Repository
 {
     public interface IWalletRepository
     {
-        Task Create(Domain.Wallet wallet);
+        Task<Domain.Wallet> Create(Domain.Wallet wallet);
         Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
         Task<Domain.Wallet?> GetById(int id);
         Task Update(Domain.Wallet wallet);
@@ -25,10 +25,12 @@ namespace Kata.Wallet.Database.Repository
             _context = context;
         }
 
-        public async Task Create(Domain.Wallet wallet)
+        public async Task<Domain.Wallet> Create(Domain.Wallet wallet)
         {
             await _context.Wallets.AddAsync(wallet);
             await _context.SaveChangesAsync();
+
+            return wallet;
         }
 
         public async Task<List<Domain.Wallet>> Filter(Domain.Wallet filter)

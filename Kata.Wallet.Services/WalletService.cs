@@ -13,7 +13,7 @@ namespace Kata.Wallet.Services
 {
     public interface IWalletService
     {
-        Task Create(Domain.Wallet wallet);
+        Task<Domain.Wallet> Create(Domain.Wallet wallet);
         Task<List<Domain.Wallet>> GetAll();
         Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
         Task<Domain.Wallet?> GetById(int idWallet);
@@ -29,9 +29,9 @@ namespace Kata.Wallet.Services
             _walletRepository = walletRepository;
         }
 
-        public async Task Create(Domain.Wallet wallet)
+        public async Task<Domain.Wallet> Create(Domain.Wallet wallet)
         {
-            await _walletRepository.Create(wallet);
+            return await _walletRepository.Create(wallet);
         }
 
         public async Task<List<Domain.Wallet>> GetAll()

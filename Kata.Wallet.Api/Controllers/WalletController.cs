@@ -23,15 +23,23 @@ public class WalletController : ControllerBase
     public async Task<ActionResult> Create([FromBody] WalletCreateDto walletDto)
     {
         var wallet = _walletMappingService.ConvertToWallet(walletDto);
-        await _walletService.Create(wallet);
+        var walletCreated = await _walletService.Create(wallet);
 
-        return Ok();
+        if (walletCreated == null)
+        {
+            return NotFound();
+        }
+
+        var walletCreatedDto = _walletMappingService.ConvertToWalletDto(walletCreated);
+
+        return Ok(walletCreatedDto);
     }
 
     [HttpGet("GetAll")]
     public async Task<ActionResult<List<Domain.Wallet>>> GetAll()
     {
         var wallets = await _walletService.GetAll();
+        var walletsDto = _walletMappingService.ConvertToWalletDto(wallets);
 
         return Ok(wallets);
     }

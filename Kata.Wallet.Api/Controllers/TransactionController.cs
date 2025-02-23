@@ -40,6 +40,7 @@ namespace Kata.Wallet.Api.Controllers
             }
 
             var transactionCreatedDto = _transactionMappingService.ConvertToTransactionDto(transactionCreated);
+
             return Ok(transactionCreatedDto);
         }
 
