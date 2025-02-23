@@ -13,8 +13,9 @@ namespace Kata.Wallet.Services
 {
     public interface ITransactionService 
     {
-        Task<string> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino);
+        Task<string?> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino);
         Task<List<Domain.Transaction>> GetTransactions(int idWallet);
+        Task<Domain.Transaction?> GetLastTransaction(int? idWalletOrigin, int? idWalletDestination);
     }
 
     public class TransactionService : ITransactionService
@@ -30,7 +31,7 @@ namespace Kata.Wallet.Services
             _resourceManager = resourceManager;
         }
 
-        public async Task<string> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino)
+        public async Task<string?> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino)
         {
             var walletOrigin = await _walletService.GetById(idWalletOrigin);
             var walletDestination = await _walletService.GetById(idWalletDestino);
@@ -56,7 +57,7 @@ namespace Kata.Wallet.Services
             return await ExecuteTransaction(walletOrigin, walletDestination, transaction, isInMemoryDb);
         }
 
-        private async Task<string> ExecuteTransaction(Domain.Wallet walletOrigin, Domain.Wallet walletDestination, Domain.Transaction transaction, bool isInMemoryDb)
+        private async Task<string?> ExecuteTransaction(Domain.Wallet walletOrigin, Domain.Wallet walletDestination, Domain.Transaction transaction, bool isInMemoryDb)
         {
             try
             {
@@ -64,10 +65,10 @@ namespace Kata.Wallet.Services
                 walletOrigin.Balance -= transaction.Amount;
                 walletDestination.Balance += transaction.Amount;
 
-                // Asign wallets to transaction
+                // Asign wallets to transaction and date
                 transaction.WalletIncoming = walletDestination;
                 transaction.WalletOutgoing = walletOrigin;
-
+                transaction.Date = DateTime.UtcNow;
 
 
                 // If it's not an InMemory Database, then make a transaction
@@ -128,5 +129,10 @@ namespace Kata.Wallet.Services
 
             return transactions;
         }
+        public async Task<Domain.Transaction?> GetLastTransaction(int? idWalletOrigin, int? idWalletDestination)
+        {
+            return await _transactionRepository.GetLastTransaction(idWalletOrigin, idWalletDestination);
+        }
+
     }
 }

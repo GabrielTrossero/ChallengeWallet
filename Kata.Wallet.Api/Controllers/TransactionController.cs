@@ -32,7 +32,15 @@ namespace Kata.Wallet.Api.Controllers
                 return BadRequest(errorMessage);
             }
 
-            return Ok();
+            var transactionCreated = await _transactionService.GetLastTransaction(idWalletOrigin, idWalletDestination);
+
+            if (transactionCreated == null)
+            {
+                return NotFound();
+            }
+
+            var transactionCreatedDto = _transactionMappingService.ConvertToTransactionDto(transactionCreated);
+            return Ok(transactionCreatedDto);
         }
 
         [HttpGet("GetTransactions")]
