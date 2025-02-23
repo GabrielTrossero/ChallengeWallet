@@ -1,4 +1,5 @@
-﻿using Kata.Wallet.Dtos;
+﻿using Kata.Wallet.Domain;
+using Kata.Wallet.Dtos;
 using Kata.Wallet.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,6 @@ namespace Kata.Wallet.Api.Controllers
             _walletService = walletService;
         }
 
-
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] TransactionDto transactionDto, int idWalletOrigin, int idWalletDestination)
         {
@@ -31,6 +31,16 @@ namespace Kata.Wallet.Api.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("GetTransactions")]
+        public async Task<ActionResult> GetTransactions([FromQuery] int idWallet)
+        {
+            var transactions = await _transactionService.GetTransactions(idWallet);
+
+            var transactionsDto = _transactionService.ConvertToTransactionDto(transactions);
+
+            return Ok(transactionsDto);
         }
     }
 }
