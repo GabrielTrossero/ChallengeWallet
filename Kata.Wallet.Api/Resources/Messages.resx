@@ -123,7 +123,7 @@
   <data name="DifferentCurrencies" xml:space="preserve">
     <value>Ambas billeteras deben tener la misma moneda para realizar la transacción.</value>
   </data>
-  <data name="InsufficientFunds " xml:space="preserve">
+  <data name="InsufficientFunds" xml:space="preserve">
     <value>Saldo insuficiente en la billetera de origen.</value>
   </data>
   <data name="TransactionError" xml:space="preserve">

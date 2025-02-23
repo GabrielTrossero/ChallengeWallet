@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
 var supportedCultures = new[] { "es", "en" };
 var localizationOptions = new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture("en"), // Español por defecto
+    DefaultRequestCulture = new RequestCulture("es"), // Spanish by default
     SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
     SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
 };
