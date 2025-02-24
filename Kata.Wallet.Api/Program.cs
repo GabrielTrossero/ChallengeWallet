@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Resources;
 using Kata.Wallet.Dtos;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,12 @@ builder.Services.AddScoped<ITransactionMappingService, TransactionMappingService
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
+
+// Config Serilog for logs from appsettings.json
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+});
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -54,6 +61,8 @@ var localizationOptions = new RequestLocalizationOptions
     SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
     SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
 };
+
+app.UseSerilogRequestLogging(); // Registrar automáticamente las peticiones HTTP
 
 app.UseRequestLocalization(localizationOptions);
 

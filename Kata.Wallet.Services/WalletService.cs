@@ -36,8 +36,7 @@ namespace Kata.Wallet.Services
 
         public async Task<List<Domain.Wallet>> GetAll()
         {
-            var filter = new Domain.Wallet();
-            return await _walletRepository.Filter(filter);
+            return await _walletRepository.Filter();
         }
 
         public async Task<List<Domain.Wallet>> Filter(Domain.Wallet filter)
