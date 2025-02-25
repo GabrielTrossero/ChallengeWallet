@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -15,6 +17,10 @@
     <ProjectReference Include="..\Kata.Wallet.Database\Kata.Wallet.Database.csproj" />
     <ProjectReference Include="..\Kata.Wallet.Dtos\Kata.Wallet.Dtos.csproj" />
     <ProjectReference Include="..\Kata.Wallet.Services\Kata.Wallet.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
   </ItemGroup>
 
 </Project>

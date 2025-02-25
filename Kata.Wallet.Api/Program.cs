@@ -1,10 +1,33 @@
 using Kata.Wallet.Database;
+using Kata.Wallet.Database.Repository;
+using Kata.Wallet.Services;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using System.Text.Json.Serialization;
+using System.Resources;
+using Kata.Wallet.Dtos;
+using Serilog;
+using Kata.Wallet.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>();
+
+// Add Dependency Injection
+builder.Services.AddScoped<IWalletMappingService, WalletMappingService>();
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITransactionMappingService, TransactionMappingService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+
+// Config Serilog for logs from appsettings.json
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+});
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -17,6 +40,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddSingleton<ResourceManager>(new ResourceManager(
+    "Kata.Wallet.Api.Resources.Messages", typeof(Program).Assembly
+));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +53,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Setting up multi-language support
+var supportedCultures = new[] { "es", "en" };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("es"), // Spanish by default
+    SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
+    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
+};
+
+app.UseMiddleware<LoggingMiddleware>();
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseHttpsRedirection();
 

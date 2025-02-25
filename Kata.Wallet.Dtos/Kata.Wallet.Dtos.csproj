@@ -11,7 +11,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kata.Wallet.Database\Kata.Wallet.Database.csproj" />
     <ProjectReference Include="..\Kata.Wallet.Domain\Kata.Wallet.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\MessagesDtos.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessagesDtos.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\MessagesDtos.en.resx">
+      <LastGenOutput>MessagesDtos.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MessagesDtos.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessagesDtos.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kata.Wallet.Domain", "Kata.Wallet.Domain\Kata.Wallet.Domain.csproj", "{AD49DB53-F88D-4D2B-BC68-96AE0F6A8986}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kata.Wallet.Services", "Kata.Wallet.Services\Kata.Wallet.Services.csproj", "{6D74A6B0-08FE-41C6-A6F4-0CB3416F4518}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F82D1D8-174A-49CA-AC5D-AAE579873A0E} = {8F82D1D8-174A-49CA-AC5D-AAE579873A0E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kata.Wallet.Dtos", "Kata.Wallet.Dtos\Kata.Wallet.Dtos.csproj", "{0D7A4EB9-7F92-4E12-987D-569C44E896B1}"
 EndProject
