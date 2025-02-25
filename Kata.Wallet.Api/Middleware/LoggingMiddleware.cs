@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
+using System.Resources;
 
 namespace Kata.Wallet.Api.Middleware
 {
@@ -7,44 +9,47 @@ namespace Kata.Wallet.Api.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<LoggingMiddleware> _logger;
+        private readonly ResourceManager _resourceManager;
 
-        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
+        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger, ResourceManager resourceManager)
         {
             _next = next;
             _logger = logger;
+            _resourceManager = resourceManager;
         }
 
         public async Task Invoke(HttpContext context)
         {
             var stopwatch = Stopwatch.StartNew();
-
             var request = context.Request;
-            _logger.LogInformation($"[REQUEST] {request.Method} {request.Path} | Query: {JsonSerializer.Serialize(request.Query)}");
 
-            if (request.ContentLength > 0 && request.Body.CanSeek)
+            try
             {
-                request.Body.Seek(0, System.IO.SeekOrigin.Begin);
-                using var reader = new System.IO.StreamReader(request.Body);
-                var body = await reader.ReadToEndAsync();
-                _logger.LogInformation($"[REQUEST BODY] {body}");
-                request.Body.Seek(0, System.IO.SeekOrigin.Begin);
+                _logger.LogInformation($"[REQUEST] {request.Method} {request.Path} | Query: {JsonSerializer.Serialize(request.Query)}");
+
+                await _next(context);
+
+                stopwatch.Stop();
+                _logger.LogInformation($"[RESPONSE] {context.Response.StatusCode} | Duration: {stopwatch.ElapsedMilliseconds}ms");
             }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+                _logger.LogError(ex, $"[ERROR] {request.Method} {request.Path} | Duration: {stopwatch.ElapsedMilliseconds}ms");
 
-            var originalResponseBody = context.Response.Body;
-            using var newResponseBody = new System.IO.MemoryStream();
-            context.Response.Body = newResponseBody;
+                context.Response.Clear();
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/json";
 
-            await _next(context);
+                var errorResponse = new
+                {
+                    message = _resourceManager.GetString("Error_General"),
+                    statusCode = context.Response.StatusCode
+                };
 
-            stopwatch.Stop();
-
-            newResponseBody.Seek(0, System.IO.SeekOrigin.Begin);
-            var responseBody = await new System.IO.StreamReader(newResponseBody).ReadToEndAsync();
-            _logger.LogInformation($"[RESPONSE] {context.Response.StatusCode} | Duration: {stopwatch.ElapsedMilliseconds}ms | Body: {responseBody}");
-
-            newResponseBody.Seek(0, System.IO.SeekOrigin.Begin);
-            await newResponseBody.CopyToAsync(originalResponseBody);
-            context.Response.Body = originalResponseBody;
+                await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+            }
         }
     }
+
 }

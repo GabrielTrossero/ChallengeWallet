@@ -132,4 +132,7 @@
   <data name="Required_Amount" xml:space="preserve">
     <value>An amount must be specified</value>
   </data>
+  <data name="Error_General" xml:space="preserve">
+    <value>An unexpected error has occurred. Please try again later.</value>
+  </data>
 </root>

@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Resources;
 using Kata.Wallet.Dtos;
 using Serilog;
+using Kata.Wallet.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Configurar soporte para múltiples idiomas
+// Setting up multi-language support
 var supportedCultures = new[] { "es", "en" };
 var localizationOptions = new RequestLocalizationOptions
 {
@@ -62,7 +63,7 @@ var localizationOptions = new RequestLocalizationOptions
     SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
 };
 
-app.UseSerilogRequestLogging(); // Registrar automáticamente las peticiones HTTP
+app.UseMiddleware<LoggingMiddleware>();
 
 app.UseRequestLocalization(localizationOptions);
 

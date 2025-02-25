@@ -59,8 +59,6 @@ namespace Kata.Wallet.Services
 
         private async Task<string?> ExecuteTransaction(Domain.Wallet walletOrigin, Domain.Wallet walletDestination, Domain.Transaction transaction, bool isInMemoryDb)
         {
-            try
-            {
                 // Update balance of wallets
                 walletOrigin.Balance -= transaction.Amount;
                 walletDestination.Balance += transaction.Amount;
@@ -87,11 +85,6 @@ namespace Kata.Wallet.Services
                 }
 
                 return string.Empty;
-            }
-            catch
-            {
-                return _resourceManager.GetString("TransactionError");
-            }
         }
 
         private async Task DoTransaction(Domain.Transaction transaction, Domain.Wallet walletOrigin, Domain.Wallet walletDestination)
