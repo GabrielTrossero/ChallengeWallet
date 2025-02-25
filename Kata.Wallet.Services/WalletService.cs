@@ -8,30 +8,53 @@ using Kata.Wallet.Dtos;
 using Kata.Wallet.Database;
 using Kata.Wallet.Database.Repository;
 using Kata.Wallet.Domain;
+using System.Resources;
 
 namespace Kata.Wallet.Services
 {
     public interface IWalletService
     {
-        Task<Domain.Wallet> Create(Domain.Wallet wallet);
+        Task<string?> Create(Domain.Wallet wallet);
         Task<List<Domain.Wallet>> GetAll();
         Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
         Task<Domain.Wallet?> GetById(int idWallet);
         Task Update(Domain.Wallet wallet);
+        Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency);
     }
 
     public class WalletService : IWalletService
     {
         private readonly IWalletRepository _walletRepository;
+        private readonly ResourceManager _resourceManager;
 
-        public WalletService(IWalletRepository walletRepository) 
+        public WalletService(IWalletRepository walletRepository, ResourceManager resourceManager) 
         {
             _walletRepository = walletRepository;
+            _resourceManager = resourceManager;
         }
 
-        public async Task<Domain.Wallet> Create(Domain.Wallet wallet)
+        public async Task<string?> Create(Domain.Wallet wallet)
         {
-            return await _walletRepository.Create(wallet);
+            if (wallet.Balance < 0)
+            {
+                return _resourceManager.GetString("Range_Balance");
+            }
+
+            var existingWallets = await _walletRepository.Filter(new Domain.Wallet { UserDocument = wallet.UserDocument });
+
+            if (existingWallets.Any(w => w.Currency == wallet.Currency))
+            {
+                return _resourceManager.GetString("WalletAlreadyExistsWithSameCurrency");
+            }
+
+            await _walletRepository.Create(wallet);
+
+            return string.Empty;
+        }
+
+        public async Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency)
+        {
+            return await _walletRepository.GetWallet(userDoc, currency);
         }
 
         public async Task<List<Domain.Wallet>> GetAll()

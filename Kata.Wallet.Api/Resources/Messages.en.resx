@@ -135,4 +135,7 @@
   <data name="Error_General" xml:space="preserve">
     <value>An unexpected error has occurred. Please try again later.</value>
   </data>
+  <data name="WalletAlreadyExistsWithSameCurrency" xml:space="preserve">
+    <value>A wallet with this currency already exists for the given user document</value>
+  </data>
 </root>

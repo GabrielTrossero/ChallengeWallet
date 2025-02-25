@@ -23,7 +23,14 @@ public class WalletController : ControllerBase
     public async Task<ActionResult> Create([FromBody] WalletCreateDto walletDto)
     {
         var wallet = _walletMappingService.ConvertToWallet(walletDto);
-        var walletCreated = await _walletService.Create(wallet);
+        var errorMessage = await _walletService.Create(wallet);
+
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            return BadRequest(errorMessage);
+        }
+
+        var walletCreated = await _walletService.GetWallet(wallet.UserDocument, wallet.Currency);
 
         if (walletCreated == null)
         {

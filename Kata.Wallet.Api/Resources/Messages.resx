@@ -135,4 +135,7 @@
   <data name="Error_General" xml:space="preserve">
     <value>Se produjo un error inesperado. Por favor, inténtelo de nuevo más tarde.</value>
   </data>
+  <data name="WalletAlreadyExistsWithSameCurrency" xml:space="preserve">
+    <value>Ya existe una billetera con esta moneda para el documento de usuario dado</value>
+  </data>
 </root>
