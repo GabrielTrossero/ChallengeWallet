@@ -138,4 +138,19 @@
   <data name="Required_Currency" xml:space="preserve">
     <value>Currency is required.</value>
   </data>
+  <data name="OnlyNumbers_Document" xml:space="preserve">
+    <value>The document must be numeric</value>
+  </data>
+  <data name="Range_Amount" xml:space="preserve">
+    <value>Amount must be a positive value</value>
+  </data>
+  <data name="Required_Amount" xml:space="preserve">
+    <value>An amount must be specified</value>
+  </data>
+  <data name="MaxLength_Description" xml:space="preserve">
+    <value>The description cannot exceed 255 characters</value>
+  </data>
+  <data name="MaxLength_UserName" xml:space="preserve">
+    <value>Username cannot exceed 20 characters</value>
+  </data>
 </root>

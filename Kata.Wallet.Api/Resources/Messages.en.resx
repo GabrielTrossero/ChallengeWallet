@@ -123,10 +123,13 @@
   <data name="DifferentCurrencies" xml:space="preserve">
     <value>Both wallets must have the same currency to perform the transaction.</value>
   </data>
-  <data name="InsufficientFunds " xml:space="preserve">
+  <data name="InsufficientFunds" xml:space="preserve">
     <value>Insufficient balance in the source wallet.</value>
   </data>
   <data name="TransactionError" xml:space="preserve">
     <value>An error occurred while processing the transaction.</value>
+  </data>
+  <data name="Required_Amount" xml:space="preserve">
+    <value>An amount must be specified</value>
   </data>
 </root>

@@ -21,7 +21,7 @@ namespace Kata.Wallet.Api.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> Create([FromBody] TransactionDto transactionDto, int idWalletOrigin, int idWalletDestination)
+        public async Task<ActionResult> Create([FromBody] TransactionCreateDto transactionDto, int idWalletOrigin, int idWalletDestination)
         {
             var transaction = _transactionMappingService.ConvertToTransaction(transactionDto);
 

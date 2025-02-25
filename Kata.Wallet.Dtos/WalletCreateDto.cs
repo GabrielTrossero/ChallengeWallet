@@ -22,15 +22,15 @@ namespace Kata.Wallet.Dtos
 
         [Required(ErrorMessageResourceName = nameof(MessagesDtos.Required_Document), ErrorMessageResourceType = typeof(MessagesDtos))]
         [MinLength(8, ErrorMessageResourceName = nameof(MessagesDtos.MinLength_Document), ErrorMessageResourceType = typeof(MessagesDtos))]
+        [RegularExpression(@"^\d+$", ErrorMessageResourceName = nameof(MessagesDtos.OnlyNumbers_Document), ErrorMessageResourceType = typeof(MessagesDtos))]
         public new string? UserDocument { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(MessagesDtos.Required_UserName), ErrorMessageResourceType = typeof(MessagesDtos))]
         [MinLength(5, ErrorMessageResourceName = nameof(MessagesDtos.MinLength_UserName), ErrorMessageResourceType = typeof(MessagesDtos))]
+        [MaxLength(20, ErrorMessageResourceName = nameof(MessagesDtos.MaxLength_UserName), ErrorMessageResourceType = typeof(MessagesDtos))]
         public new string? UserName { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(MessagesDtos.Required_Currency), ErrorMessageResourceType = typeof(MessagesDtos))]
         public new Currency? Currency { get; set; }
-    
-
     }
 }

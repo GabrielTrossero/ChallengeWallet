@@ -129,4 +129,7 @@
   <data name="TransactionError" xml:space="preserve">
     <value>Ocurrió un error al procesar la transacción.</value>
   </data>
+  <data name="Required_Amount" xml:space="preserve">
+    <value>Se debe especificar un monto</value>
+  </data>
 </root>

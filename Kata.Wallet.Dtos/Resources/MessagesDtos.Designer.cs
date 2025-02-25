@@ -61,6 +61,24 @@ namespace Kata.Wallet.Dtos.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to La descripción no puede superar los 255 caracteres.
+        /// </summary>
+        internal static string MaxLength_Description {
+            get {
+                return ResourceManager.GetString("MaxLength_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username no puede superar los 20 caracteres.
+        /// </summary>
+        internal static string MaxLength_UserName {
+            get {
+                return ResourceManager.GetString("MaxLength_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El &apos;Documento&apos; debe tener al menos 8 caracteres..
         /// </summary>
         internal static string MinLength_Document {
@@ -79,11 +97,38 @@ namespace Kata.Wallet.Dtos.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El documento debe ser númerico.
+        /// </summary>
+        internal static string OnlyNumbers_Document {
+            get {
+                return ResourceManager.GetString("OnlyNumbers_Document", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El monto debe ser positivo.
+        /// </summary>
+        internal static string Range_Amount {
+            get {
+                return ResourceManager.GetString("Range_Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El balance no puede ser negativo..
         /// </summary>
         internal static string Range_Balance {
             get {
                 return ResourceManager.GetString("Range_Balance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se debe especificar un monto.
+        /// </summary>
+        internal static string Required_Amount {
+            get {
+                return ResourceManager.GetString("Required_Amount", resourceCulture);
             }
         }
         

@@ -28,6 +28,8 @@ namespace Kata.Wallet.Database.Repository
 
         public async Task<Domain.Transaction> Create(Domain.Transaction transaction)
         {
+            transaction.Id = 0; // Auotincrement
+
             await _context.Transactions.AddAsync(transaction);
             await _context.SaveChangesAsync();
 

@@ -16,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\MessagesDtos.en.Designer.cs">
-      <DependentUpon>MessagesDtos.en.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\MessagesDtos.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
