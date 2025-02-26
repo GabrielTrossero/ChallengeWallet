@@ -14,6 +14,7 @@ namespace Kata.Wallet.Database.Repository
         Task<List<Domain.Wallet>> Filter(Domain.Wallet? filter = null);
         Task<Domain.Wallet?> GetById(int id);
         Task Update(Domain.Wallet wallet);
+        Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency);
     }
 
     public class WalletRepository : IWalletRepository
@@ -33,6 +34,12 @@ namespace Kata.Wallet.Database.Repository
             await _context.SaveChangesAsync();
 
             return wallet;
+        }
+
+        public async Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency)
+        {
+            return await _context.Wallets
+                                 .FirstOrDefaultAsync(w => w.UserDocument == userDoc && w.Currency == currency);
         }
 
         public async Task<List<Domain.Wallet>> Filter(Domain.Wallet? filter = null)
