@@ -130,6 +130,99 @@ namespace Kata.Wallet.Tests
             Assert.Equal("Balance cannot be negative.", result); // We check the returned message
         }
 
-    }
+        [Fact]
+        public async Task GetWallet_ShouldReturnWallet_WhenWalletExists()
+        {
+            // Arrange
+            var expectedWallet = new Domain.Wallet { Id = 1, Currency = Domain.Currency.USD, UserDocument = "40992777" };
+            _mockWalletRepository.Setup(repo => repo.GetWallet("40992777", Domain.Currency.USD))
+                                 .ReturnsAsync(expectedWallet);
 
+            // Act
+            var result = await _walletService.GetWallet("40992777", Domain.Currency.USD);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(expectedWallet.Id, result.Id);
+            Assert.Equal(expectedWallet.Currency, result.Currency);
+            Assert.Equal(expectedWallet.UserDocument, result.UserDocument);
+        }
+
+        [Fact]
+        public async Task GetWallet_ShouldReturnNull_WhenWalletDoesNotExist()
+        {
+            // Arrange
+            _mockWalletRepository.Setup(repo => repo.GetWallet("40992777", Domain.Currency.USD))
+                                 .ReturnsAsync((Domain.Wallet?)null);
+
+            // Act
+            var result = await _walletService.GetWallet("40992777", Domain.Currency.USD);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetAll_ShouldReturnListOfWallets()
+        {
+            // Arrange
+            var wallets = new List<Domain.Wallet>
+            {
+                new Domain.Wallet { Id = 1, Currency = Domain.Currency.USD },
+                new Domain.Wallet { Id = 2, Currency = Domain.Currency.EUR },
+                new Domain.Wallet { Id = 3, Currency = Domain.Currency.ARS },
+                new Domain.Wallet { Id = 4, Currency = Domain.Currency.ARS }
+            };
+
+            _mockWalletRepository.Setup(repo => repo.Filter(It.IsAny<Domain.Wallet>())).ReturnsAsync(wallets);
+
+            // Act
+            var result = await _walletService.GetAll();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Count);
+        }
+
+        [Fact]
+        public async Task GetById_ShouldReturnWallet_WhenWalletExists()
+        {
+            // Arrange
+            var wallet = new Domain.Wallet { Id = 1, Currency = Domain.Currency.USD };
+            _mockWalletRepository.Setup(repo => repo.GetById(1)).ReturnsAsync(wallet);
+
+            // Act
+            var result = await _walletService.GetById(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+        }
+
+        [Fact]
+        public async Task GetById_ShouldReturnNull_WhenWalletDoesNotExist()
+        {
+            // Arrange
+            _mockWalletRepository.Setup(repo => repo.GetById(99)).ReturnsAsync((Domain.Wallet?)null);
+
+            // Act
+            var result = await _walletService.GetById(99);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task Update_ShouldCallRepositoryUpdate()
+        {
+            // Arrange
+            var wallet = new Domain.Wallet { Id = 1, Currency = Domain.Currency.USD };
+
+            // Act
+            await _walletService.Update(wallet);
+
+            // Assert
+            _mockWalletRepository.Verify(repo => repo.Update(wallet), Times.Once);
+        }
+    }
 }
