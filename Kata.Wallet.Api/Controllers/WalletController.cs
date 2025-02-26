@@ -52,10 +52,9 @@ public class WalletController : ControllerBase
     }
 
     [HttpGet("Filter")]
-    public async Task<ActionResult<List<Domain.Wallet>>> Filter([FromQuery] WalletDto filter)
+    public async Task<ActionResult<List<Domain.Wallet>>> Filter([FromQuery] string? userDocument = null, Currency? currency = null)
     {
-        var wallet = _walletMappingService.ConvertToWallet(filter);
-        var wallets = await _walletService.Filter(wallet);
+        var wallets = await _walletService.Filter(userDocument, currency);
         var walletsDto = _walletMappingService.ConvertToWalletDto(wallets);
 
         return Ok(wallets);

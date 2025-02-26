@@ -16,7 +16,7 @@ namespace Kata.Wallet.Services
     {
         Task<string?> Create(Domain.Wallet wallet);
         Task<List<Domain.Wallet>> GetAll();
-        Task<List<Domain.Wallet>> Filter(Domain.Wallet filter);
+        Task<List<Domain.Wallet>> Filter(string? userDocument = null, Currency? currency = null);
         Task<Domain.Wallet?> GetById(int idWallet);
         Task Update(Domain.Wallet wallet);
         Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency);
@@ -40,7 +40,7 @@ namespace Kata.Wallet.Services
                 return _resourceManager.GetString("Range_Balance");
             }
 
-            var existingWallets = await _walletRepository.Filter(new Domain.Wallet { UserDocument = wallet.UserDocument });
+            var existingWallets = await _walletRepository.Filter(wallet.UserDocument, wallet.Currency);
 
             if (existingWallets.Any(w => w.Currency == wallet.Currency))
             {
@@ -62,9 +62,9 @@ namespace Kata.Wallet.Services
             return await _walletRepository.Filter();
         }
 
-        public async Task<List<Domain.Wallet>> Filter(Domain.Wallet filter)
+        public async Task<List<Domain.Wallet>> Filter(string? userDocument = null, Currency? currency = null)
         {
-            return await _walletRepository.Filter(filter);
+            return await _walletRepository.Filter(userDocument, currency);
         }
 
         public async Task<Domain.Wallet?> GetById(int idWallet)
