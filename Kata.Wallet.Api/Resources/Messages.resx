@@ -138,4 +138,7 @@
   <data name="WalletAlreadyExistsWithSameCurrency" xml:space="preserve">
     <value>Ya existe una billetera con esta moneda para el documento de usuario dado</value>
   </data>
+  <data name="Positive_Amount" xml:space="preserve">
+    <value>El monto debe ser positivo</value>
+  </data>
 </root>
