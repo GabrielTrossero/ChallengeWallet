@@ -11,7 +11,7 @@ namespace Kata.Wallet.Database.Repository
     public interface IWalletRepository
     {
         Task<Domain.Wallet> Create(Domain.Wallet wallet);
-        Task<List<Domain.Wallet>> Filter(Domain.Wallet? filter = null);
+        Task<List<Domain.Wallet>> Filter(string? userDocument = null, Currency? currency = null);
         Task<Domain.Wallet?> GetById(int id);
         Task Update(Domain.Wallet wallet);
         Task<Domain.Wallet?> GetWallet(string userDoc, Domain.Currency currency);
@@ -42,24 +42,21 @@ namespace Kata.Wallet.Database.Repository
                                  .FirstOrDefaultAsync(w => w.UserDocument == userDoc && w.Currency == currency);
         }
 
-        public async Task<List<Domain.Wallet>> Filter(Domain.Wallet? filter = null)
+        public async Task<List<Domain.Wallet>> Filter(string? userDocument = null, Currency? currency = null)
         {
             var query = _context.Wallets.AsQueryable();
 
-            if (filter != null)
-            {
                 // Filter by Currency if provided
-                if (Enum.IsDefined(typeof(Currency), filter.Currency))
+                if (currency != null)
                 {
-                    query = query.Where(w => w.Currency == filter.Currency);
+                    query = query.Where(w => w.Currency == currency);
                 }
 
                 // Filter by UserDocument if provided
-                if (!string.IsNullOrEmpty(filter.UserDocument))
+                if (!string.IsNullOrEmpty(userDocument))
                 {
-                    query = query.Where(w => w.UserDocument == filter.UserDocument);
+                    query = query.Where(w => w.UserDocument.Trim() == userDocument.Trim());
                 }
-            }
 
             return await query.ToListAsync();
         }
