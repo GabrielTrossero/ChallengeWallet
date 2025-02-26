@@ -33,6 +33,12 @@ namespace Kata.Wallet.Services
 
         public async Task<string?> Create(Domain.Transaction transaction, int idWalletOrigin, int idWalletDestino)
         {
+
+            if (transaction.Amount < 0)
+            {
+                return _resourceManager.GetString("Positive_Amount");
+            }
+
             var walletOrigin = await _walletService.GetById(idWalletOrigin);
             var walletDestination = await _walletService.GetById(idWalletDestino);
 
