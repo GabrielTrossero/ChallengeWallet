@@ -43,20 +43,20 @@ public class WalletController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<ActionResult<List<Domain.Wallet>>> GetAll()
+    public async Task<ActionResult<List<WalletDto>>> GetAll()
     {
         var wallets = await _walletService.GetAll();
         var walletsDto = _walletMappingService.ConvertToWalletDto(wallets);
 
-        return Ok(wallets);
+        return Ok(walletsDto);
     }
 
     [HttpGet("Filter")]
-    public async Task<ActionResult<List<Domain.Wallet>>> Filter([FromQuery] string? userDocument = null, Currency? currency = null)
+    public async Task<ActionResult<List<WalletDto>>> Filter([FromQuery] string? userDocument = null, Currency? currency = null)
     {
         var wallets = await _walletService.Filter(userDocument, currency);
         var walletsDto = _walletMappingService.ConvertToWalletDto(wallets);
 
-        return Ok(wallets);
+        return Ok(walletsDto);
     }
 }
